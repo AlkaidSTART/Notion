@@ -44,14 +44,19 @@ function toggleRotate(type, isEntering) {
     if (type === 'notion') {
         notionRotated.value = isEntering
         notionImgRef.value.style.transform = notionRotated.value ? 'rotate(180deg)' : 'rotate(0deg)'
+        notionImgRef.value.style.transition = 'transform 0.3s ease'
     }
     if (type === 'explore') {
         exploreRotated.value = isEntering
         exploreImgRef.value.style.transform = exploreRotated.value ? 'rotate(180deg)' : 'rotate(0deg)'
+        exploreImgRef.value.style.transition = 'transform 0.3s ease'
     }
 }
 </script>
 <style scoped>
+*{
+    overflow-y: hidden;
+}
 img {
     width: 100%;
     height: 100%;
@@ -62,7 +67,7 @@ img {
     width: 100%;
     height: 5rem;
     display: flex;
-    padding: 1rem 1rem 1rem 2rem;
+    padding: 1rem 1rem 0.5rem 2rem;
     align-items: center;
     display: fixed;
 }
@@ -92,7 +97,7 @@ img {
     width: 4rem;
     height: 2rem;
     font-size: 1.2rem;
-    margin-left: 3rem;
+    margin-left: 5rem;
     font-weight: 700;
     color: #000;
 }
