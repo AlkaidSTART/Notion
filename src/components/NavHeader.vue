@@ -4,10 +4,8 @@
             <img src="../assets/img/notion.png" alt="">
         </div>
         <div class="items">
-            <div class="item"
-                 @mouseenter="toggleRotate('notion', true)"
-                 @mouseleave="toggleRotate('notion', false)"
-                 style="cursor:pointer;">
+            <div class="item" @mouseenter="toggleRotateWithDelay('notion', true)" @mouseleave="toggleRotateWithDelay('notion', false)"
+                style="cursor:pointer;">
                 Notion
                 <img ref="notionImgRef" src="../assets/img/向下箭头.png" alt="">
             </div>
@@ -16,10 +14,8 @@
             <div class="item">AI</div>
             <div class="item">Enterprise</div>
             <div class="item">Pricing</div>
-            <div class="item"
-                 @mouseenter="toggleRotate('explore', true)"
-                 @mouseleave="toggleRotate('explore', false)"
-                 style="cursor:pointer;">
+            <div class="item" @mouseenter="toggleRotateWithDelay('explore', true)" @mouseleave="toggleRotateWithDelay('explore', false)"
+                style="cursor:pointer;">
                 Explore
                 <img ref="exploreImgRef" src="../assets/img/向下箭头.png" alt="">
             </div>
@@ -30,11 +26,16 @@
             <button>Get Notion free</button>
         </div>
     </nav>
+    <div class="child" v-show="bol">
+        <slot name="Notion"></slot>
+        <slot name="Explore"></slot>
+    </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
+const bol = ref(false)
 const notionImgRef = ref(null)
 const exploreImgRef = ref(null)
 const notionRotated = ref(false)
@@ -44,19 +45,52 @@ function toggleRotate(type, isEntering) {
     if (type === 'notion') {
         notionRotated.value = isEntering
         notionImgRef.value.style.transform = notionRotated.value ? 'rotate(180deg)' : 'rotate(0deg)'
-        notionImgRef.value.style.transition = 'transform 0.3s ease'
+        notionImgRef.value.style.transition = 'transform 0.4s ease'
+        bol.value = isEntering 
     }
     if (type === 'explore') {
         exploreRotated.value = isEntering
         exploreImgRef.value.style.transform = exploreRotated.value ? 'rotate(180deg)' : 'rotate(0deg)'
-        exploreImgRef.value.style.transition = 'transform 0.3s ease'
+        exploreImgRef.value.style.transition = 'transform 0.4s ease'
+        bol.value = isEntering 
     }
 }
+function perfect(toggleRotate, delay) {
+    let timer = null;
+    return (type, isEntering) => {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+            toggleRotate(type, isEntering);
+        }, delay);
+    };
+}
+function checkvalue(type, isenter) {
+    if (type === 'notion') {
+        if (isenter) {
+            document.querySelector('.Notion').style.display = 'flex'
+            console.log(1);
+            
+        } else {
+            document.querySelector('.Notion').style.display = 'flex'
+            console.log(2);
+        }
+    }
+    if (type === 'explore') {
+        if (isenter) {
+            document.querySelector('.Explore').style.display = 'flex'
+        } else {
+            document.querySelector('.Explore').style.display = 'none'
+        }
+    }
+}
+
+const toggleRotateWithDelay = perfect(toggleRotate, 1000);
 </script>
 <style scoped>
-*{
+* {
     overflow-y: hidden;
 }
+
 img {
     width: 100%;
     height: 100%;
@@ -112,6 +146,14 @@ img {
     border: 1px solid #000;
     margin-left: 1rem;
     background-color: #000;
+}
+
+.child {
+    height:auto;
+    background-color: #fff;
+    margin-left: 7vw;
+    margin-right: 15vw;
+
 }
 </style>
 <style lang="scss"></style>

@@ -3,7 +3,7 @@
         <img src="../assets/img/猫咪.svg" alt="">
 
     </div>
-    <div class="text"><span>Sorry,thst page cannot be found</span></div>
+    <div class="text"><span>Sorry,that page cannot be found</span></div>
 </template>
 
 <script setup>
