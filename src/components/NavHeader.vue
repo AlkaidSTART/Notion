@@ -4,8 +4,8 @@
             <img src="../assets/img/notion.png" alt="">
         </div>
         <div class="items">
-            <div class="item" @mouseenter="toggleRotateWithDelay('notion', true)" @mouseleave="toggleRotateWithDelay('notion', false)"
-                style="cursor:pointer;">
+            <div class="item" @mouseenter="toggleRotateWithDelay('notion', true)"
+                @mouseleave="toggleRotateWithDelay('notion', false)" style="cursor:pointer;">
                 Notion
                 <img ref="notionImgRef" src="../assets/img/向下箭头.png" alt="">
             </div>
@@ -14,8 +14,8 @@
             <div class="item">AI</div>
             <div class="item">Enterprise</div>
             <div class="item">Pricing</div>
-            <div class="item" @mouseenter="toggleRotateWithDelay('explore', true)" @mouseleave="toggleRotateWithDelay('explore', false)"
-                style="cursor:pointer;">
+            <div class="item" @mouseenter="toggleRotateWithDelay('explore', true)"
+                @mouseleave="toggleRotateWithDelay('explore', true)" style="cursor:pointer;">
                 Explore
                 <img ref="exploreImgRef" src="../assets/img/向下箭头.png" alt="">
             </div>
@@ -26,7 +26,7 @@
             <button>Get Notion free</button>
         </div>
     </nav>
-    <div class="child" v-show="bol">
+    <div class="child" v-show="bol" ref="isref">
         <slot name="Notion"></slot>
         <slot name="Explore"></slot>
     </div>
@@ -34,8 +34,9 @@
 
 <script setup>
 import { ref } from 'vue'
-
-const bol = ref(false)
+import notion from './notion.vue'
+const notionData = ref(null)
+const bol = ref(true)
 const notionImgRef = ref(null)
 const exploreImgRef = ref(null)
 const notionRotated = ref(false)
@@ -43,18 +44,22 @@ const exploreRotated = ref(false)
 
 function toggleRotate(type, isEntering) {
     if (type === 'notion') {
-        notionRotated.value = isEntering
-        notionImgRef.value.style.transform = notionRotated.value ? 'rotate(180deg)' : 'rotate(0deg)'
-        notionImgRef.value.style.transition = 'transform 0.4s ease'
-        bol.value = isEntering 
+        notionRotated.value = isEntering;
+        setRotationStyle(notionImgRef.value, notionRotated.value);
+        bol.value = isEntering;
     }
-    if (type === 'explore') {
-        exploreRotated.value = isEntering
-        exploreImgRef.value.style.transform = exploreRotated.value ? 'rotate(180deg)' : 'rotate(0deg)'
-        exploreImgRef.value.style.transition = 'transform 0.4s ease'
-        bol.value = isEntering 
+    // 处理Explore类型的旋转和显示控制
+    else if (type === 'explore') {
+        exploreRotated.value = isEntering;
+        setRotationStyle(exploreImgRef.value, exploreRotated.value);
+        bol.value = isEntering;
+    }
+    // 添加默认情况处理
+    else {
+        console.warn(`未知类型: ${type}`);
     }
 }
+// 1. 将 perfect 函数移到 toggleRotate 外部
 function perfect(toggleRotate, delay) {
     let timer = null;
     return (type, isEntering) => {
@@ -64,12 +69,24 @@ function perfect(toggleRotate, delay) {
         }, delay);
     };
 }
+const isleave = ref(false)
+function isLeave(type) {
+    if (type === 'notion') {
+        notionRotated.value = false;
+        setRotationStyle(notionImgRef.value, notionRotated.value);
+    }
+    else if (type === 'explore') {
+        exploreRotated.value = false;
+        setRotationStyle(exploreImgRef.value, exploreRotated.value);
+    }
+}
+
 function checkvalue(type, isenter) {
     if (type === 'notion') {
         if (isenter) {
             document.querySelector('.Notion').style.display = 'flex'
             console.log(1);
-            
+
         } else {
             document.querySelector('.Notion').style.display = 'flex'
             console.log(2);
@@ -83,6 +100,14 @@ function checkvalue(type, isenter) {
         }
     }
 }
+
+function setRotationStyle(element, isRotated) {
+  if (!element) return;
+  element.style.transform = isRotated ? 'rotate(180deg)' : 'rotate(0deg)';
+  element.style.transition = 'transform 0.4s ease';
+}
+
+
 
 const toggleRotateWithDelay = perfect(toggleRotate, 1000);
 </script>
@@ -103,7 +128,10 @@ img {
     display: flex;
     padding: 1rem 1rem 0.5rem 2rem;
     align-items: center;
-    display: fixed;
+    /* display: flex; */
+    position: fixed;
+    z-index: 9999;
+    margin-bottom: 10vw;
 }
 
 .logo {
@@ -149,11 +177,12 @@ img {
 }
 
 .child {
-    height:auto;
+    height: auto;
     background-color: #fff;
     margin-left: 7vw;
     margin-right: 15vw;
-
+    position: fixed;
+    top: 5rem;
 }
 </style>
 <style lang="scss"></style>

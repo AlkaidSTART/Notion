@@ -1,5 +1,5 @@
 <template>
-    <div class="pop">
+    <div class="pop" @mouseleave="ifEnter">
         <div class="head">
             <div class="head-box">Features</div>
             <div class="head-box">Get started</div>
@@ -73,12 +73,32 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+const inf=ref('none')
+const isleave=ref(false)
+const emit=defineEmits(['isleave'])
+
+function ifEnter() {
+  const pop = document.querySelector('.items');
+  const notionElement = document.querySelector('.pop');
+
+  if (!pop || !notionElement) return;
+
+  pop.removeEventListener('mouseleave', handleMouseLeave);
+  pop.addEventListener('mouseleave', handleMouseLeave);
+}
+  function handleMouseLeave(e) {
+    isleave.value=true
+    emit('isleave',isleave.value)
+  }
+
 
 </script>
 <style scoped>
-*{
+* {
     overflow-y: hidden;
 }
+
 .head {
     width: 87%;
     display: flex;
@@ -94,14 +114,15 @@
     color: #eee;
     text-align: center;
 }
+
 .head-box:hover {
     cursor: pointer;
-    color: #fff;
+    color: #000;
 }
 
 .items {
-    width:76vw;
-    height: 50vw;
+    width: 76vw;
+    height: auto;
     display: flex;
     justify-content: space-between;
     margin-left: 7vw;
@@ -109,12 +130,14 @@
     align-items: center;
     flex-wrap: wrap;
     z-index: 9999;
-    position: absolute;
-    top: -4vh;
+    margin-top: -2vh;
+    /* position: absolute;
+    top: -4vh; */
 }
+
 .item-box {
     width: 18vw;
-    height: 6vw;
+    height: 5vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -122,6 +145,7 @@
     padding-left: 0.5rem;
     border-radius: 0.5rem;
 }
+
 .item {
     width: 18vw;
     height: 24vw;
@@ -131,6 +155,7 @@
     flex-wrap: wrap;
     z-index: 9999;
 }
+
 .item-box:hover {
     cursor: pointer;
     background-color: antiquewhite;
@@ -141,6 +166,7 @@
     font-weight: 600;
     color: #000;
 }
+
 .text~span {
     font-size: 0.8rem;
     font-weight: 400;
@@ -150,16 +176,18 @@
 .footer-box {
     display: flex;
     align-items: center;
-    position: absolute;
-    bottom: 0vw;
+    /* position: absolute;
+    bottom: 0vw; */
     width: 50vw;
     margin-left: 7vw;
     background-color: bisque;
-    padding-left: 0.6rem;
-    padding-right: 3vw;
-    border-radius: 0.3rem;
+    padding: 1rem 1rem;
+    border-radius: 0.3rem;  
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
-.footer-left{
+
+.footer-left {
     width: 28vw;
     height: 9vw;
     display: flex;
@@ -167,7 +195,8 @@
     align-items: center;
     flex-wrap: wrap;
 }
-.footer-right{
+
+.footer-right {
     width: 8vw;
     height: 8vw;
     display: flex;
@@ -175,21 +204,25 @@
     align-items: center;
     margin-left: 6vw;
 }
-img{
+
+img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-button{
+button {
     width: 26vw;
     height: 3vw;
     background-color: skyblue;
     color: #fff;
     border-radius: 0.5rem;
-    
+
 }
-.pop{
-    height:auto;
+
+.pop {
+    height: auto;
+    position: relative;
+    padding-bottom: 2rem;
 }
 </style>

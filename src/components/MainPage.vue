@@ -24,6 +24,7 @@ img {
     align-items: center;
     justify-content: center;
     overflow-y: hidden;
+    margin-top: 6vw;
 }
 
 .text {
