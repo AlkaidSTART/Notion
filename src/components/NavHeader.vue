@@ -15,7 +15,7 @@
             <div class="item">Enterprise</div>
             <div class="item">Pricing</div>
             <div class="item" @mouseenter="toggleRotateWithDelay('explore', true)"
-                @mouseleave="toggleRotateWithDelay('explore', true)" style="cursor:pointer;">
+                @mouseleave="toggleRotateWithDelay('explore', false)" style="cursor:pointer;">
                 Explore
                 <img ref="exploreImgRef" src="../assets/img/向下箭头.png" alt="">
             </div>
@@ -27,8 +27,8 @@
         </div>
     </nav>
     <div class="child" v-show="bol" ref="isref">
-        <slot name="Notion"></slot>
-        <slot name="Explore"></slot>
+        <slot name="Notion" v-if="notionRotated"></slot>
+        <slot name="Explore" v-if="exploreRotated"></slot>
     </div>
 </template>
 
