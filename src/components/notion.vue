@@ -84,10 +84,16 @@ function ifEnter() {
 
   if (!pop || !notionElement) return;
 
-  pop.removeEventListener('mouseleave', handleMouseLeave);
-  pop.addEventListener('mouseleave', handleMouseLeave);
+  pop.removeEventListener('mouseleave', Isleave);
+  pop.addEventListener('mouseleave', Isleave);
 }
-  function handleMouseLeave(e) {
+  function Isleave(e) {
+    if(e.relatedTarget && e.relatedTarget.closest('.pop')) {
+      return; // 鼠标仍在 .notion 元素内，忽略事件
+    }
+    else{
+      inf.value='block'
+    }   
     isleave.value=true
     emit('isleave',isleave.value)
   }
