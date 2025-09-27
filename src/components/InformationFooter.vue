@@ -10,7 +10,7 @@
                 <div class="item-"><img src="../assets/img/footer/github-fill.png" alt=""></div>
                 <div class="item-"><img src="../assets/img/footer/QQ.png" alt=""></div>
                 <div class="item-"><img src="../assets/img/footer/Youtube-fill.png" alt=""></div>
-                <div class="item-"><img src="../assets/img/footer/github-fill.png" alt=""></div>
+                <div class="item-"><img src="../assets/img/footer/bilibili-line.png" alt=""></div>
             </div>
             <div class="language"></div>
             <span class="cookie-settings">Cookie settings</span>

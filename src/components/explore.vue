@@ -79,6 +79,11 @@
     margin-bottom: 0.5rem;
     font-size: 1rem;
 }
+.item:hover{
+    cursor: pointer;
+    color: #000;
+    text-decoration: underline;
+}
 *{
     overflow: hidden;
 }

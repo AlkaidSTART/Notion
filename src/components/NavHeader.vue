@@ -27,8 +27,8 @@
         </div>
     </nav>
     <div class="child" v-show="bol" ref="isref">
-        <slot name="Notion" v-if="notionRotated"></slot>
-        <slot name="Explore" v-if="exploreRotated"></slot>
+        <slot name="Notion" v-if="notionRotated" slot-content="notion"></slot>
+        <slot name="Explore" v-if="exploreRotated" slot-content="explore"></slot>
     </div>
 </template>
 
@@ -41,6 +41,45 @@ const notionImgRef = ref(null)
 const exploreImgRef = ref(null)
 const notionRotated = ref(false)
 const exploreRotated = ref(false)
+function leavingbox(type, isEntering) {
+    const leavebox = document.querySelector('.child');
+    if (!leavebox) return;
+
+    const sevenVw = window.innerWidth * 0.07;
+    // 使用插槽内容容器作为检测目标（需在插槽内容根元素添加slot-content类）
+    const slotContentSelector = `.slot-content[slot-content="${type}"]`;
+
+    const handleMouseMove = (e) => {
+        // 检查鼠标是否在插槽内容区域内
+        const isInSlot = e.target.closest(slotContentSelector) !== null;
+
+        if (e.clientX <= sevenVw && !isInSlot) {
+            isLeave(type);
+            bol.value = false;
+            checkvalue(type, isEntering);
+        }
+    };
+
+    // 添加持久化mousemove监听（不立即移除）
+    leavebox.addEventListener('mousemove', handleMouseMove);
+
+    // 修复mouseleave事件冒泡问题
+    leavebox.addEventListener('mouseleave', (e) => {
+        // 检查鼠标是否真的离开整个.child区域
+        const rect = leavebox.getBoundingClientRect();
+        if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+              e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+            isLeave(type);
+            bol.value = false;
+            checkvalue(type, isEntering);
+        }
+    });
+
+    // 添加组件卸载时的事件清理
+    onUnmounted(() => {
+        leavebox.removeEventListener('mousemove', handleMouseMove);
+    });
+}
 
 function toggleRotate(type, isEntering) {
     if (type === 'notion') {
@@ -102,9 +141,9 @@ function checkvalue(type, isenter) {
 }
 
 function setRotationStyle(element, isRotated) {
-  if (!element) return;
-  element.style.transform = isRotated ? 'rotate(180deg)' : 'rotate(0deg)';
-  element.style.transition = 'transform 0.4s ease';
+    if (!element) return;
+    element.style.transform = isRotated ? 'rotate(180deg)' : 'rotate(0deg)';
+    element.style.transition = 'transform 0.4s ease';
 }
 
 
